@@ -23,9 +23,9 @@
 
 namespace dpp {
 
-snowflake_t<void>::snowflake_t(const uint64_t &value) : value(value) {}
+snowflake_t<void>::snowflake_t(const uint64_t &value) noexcept : value(value) {}
 
-snowflake_t<void>::snowflake_t(const std::string &string_value) {
+snowflake_t<void>::snowflake_t(const std::string &string_value) noexcept {
 	try {
 		value = std::stoull(string_value);
 	}
@@ -34,13 +34,13 @@ snowflake_t<void>::snowflake_t(const std::string &string_value) {
 	}
 }
 
-snowflake_t<void>::snowflake_t() : snowflake(0) {}
+snowflake_t<void>::snowflake_t() noexcept : snowflake(0) {}
 
-snowflake::operator uint64_t() const {
+snowflake::operator uint64_t() const noexcept {
 	return value;
 }
 
-snowflake& snowflake::operator=(const std::string &snowflake_val) {
+snowflake& snowflake::operator=(const std::string &snowflake_val) noexcept {
 	try {
 		value = std::stoull(snowflake_val);
 	}
@@ -50,16 +50,16 @@ snowflake& snowflake::operator=(const std::string &snowflake_val) {
 	return *this;
 }
 
-snowflake& snowflake::operator=(const uint64_t &snowflake_val) {
+snowflake& snowflake::operator=(const uint64_t &snowflake_val) noexcept {
 	value = snowflake_val;
 	return *this;
 }
 
-bool snowflake::operator==(const snowflake& other) const {
+bool snowflake::operator==(const snowflake& other) const noexcept {
 	return other.value == value;
 }
 
-bool snowflake::operator==(const uint64_t& other) const {
+bool snowflake::operator==(const uint64_t& other) const noexcept {
 	return other == value;
 }
 
@@ -68,20 +68,20 @@ snowflake::operator nlohmann::json() const {
 	return std::to_string(value);
 }
 
-double snowflake::get_creation_time() const {
+double snowflake::get_creation_time() const noexcept {
 	const uint64_t first_january_2016 = 1420070400000;
 	return (double)((value >> 22) + first_january_2016) / 1000.0;
 }
 
-uint8_t snowflake::get_worker_id() const {
+uint8_t snowflake::get_worker_id() const noexcept {
 	return (uint8_t)((value & 0x3E0000) >> 17);
 }
 
-uint8_t snowflake::get_process_id() const {
+uint8_t snowflake::get_process_id() const noexcept {
 	return (uint8_t)((value & 0x1F000) >> 12);
 }
 
-uint16_t snowflake::get_increment() const {
+uint16_t snowflake::get_increment() const noexcept {
 	return (value & 0xFFF);
 }
 

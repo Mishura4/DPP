@@ -35,11 +35,11 @@ void cluster::global_command_create(const slashcommand &s, command_completion_ev
 	rest_request<slashcommand>(this, API_PATH "/applications", std::to_string(s.application_id ? s.application_id : me.id), "commands", m_post, s.build_json(false), callback);
 }
 
-void cluster::global_command_get(snowflake id, command_completion_event_t callback) {
+void cluster::global_command_get(snowflake_t<slashcommand> id, command_completion_event_t callback) {
 	rest_request<slashcommand>(this, API_PATH "/applications", std::to_string(me.id), "commands/" + std::to_string(id), m_get, "", callback);
 }
 
-void cluster::global_command_delete(snowflake id, command_completion_event_t callback) {
+void cluster::global_command_delete(snowflake_t<slashcommand> id, command_completion_event_t callback) {
 	rest_request<confirmation>(this, API_PATH "/applications", std::to_string(me.id), "commands/" + std::to_string(id), m_delete, "", callback);
 }
 
@@ -51,7 +51,7 @@ void cluster::global_commands_get(command_completion_event_t callback) {
 	rest_request_list<slashcommand>(this, API_PATH "/applications", std::to_string(me.id), "commands", m_get, "", callback);
 }
 
-void cluster::guild_bulk_command_create(const std::vector<slashcommand> &commands, snowflake guild_id, command_completion_event_t callback) {
+void cluster::guild_bulk_command_create(const std::vector<slashcommand> &commands, snowflake_t<guild> guild_id, command_completion_event_t callback) {
 	json j = json::array();
 	for (auto & s : commands) {
 		j.push_back(json::parse(s.build_json(false)));
@@ -59,11 +59,11 @@ void cluster::guild_bulk_command_create(const std::vector<slashcommand> &command
 	rest_request_list<slashcommand>(this, API_PATH "/applications", std::to_string(commands.size() > 0 && commands[0].application_id ? commands[0].application_id : me.id), "guilds/" + std::to_string(guild_id) + "/commands", m_put, j.dump(), callback);
 }
 
-void cluster::guild_commands_get_permissions(snowflake guild_id, command_completion_event_t callback) {
+void cluster::guild_commands_get_permissions(snowflake_t<guild> guild_id, command_completion_event_t callback) {
 	rest_request_list<guild_command_permissions>(this, API_PATH "/applications", std::to_string(me.id), "guilds/" + std::to_string(guild_id) + "/commands/permissions", m_get, "", callback);
 }
 
-void cluster::guild_bulk_command_edit_permissions(const std::vector<slashcommand> &commands, snowflake guild_id, command_completion_event_t callback) {
+void cluster::guild_bulk_command_edit_permissions(const std::vector<slashcommand> &commands, snowflake_t<guild> guild_id, command_completion_event_t callback) {
 	if (commands.empty()) {
 		return;
 	}
@@ -80,7 +80,7 @@ void cluster::guild_bulk_command_edit_permissions(const std::vector<slashcommand
 	rest_request_list<guild_command_permissions>(this, API_PATH "/applications", std::to_string(me.id), "guilds/" + std::to_string(guild_id) + "/commands/permissions", m_put, j.dump(), callback);
 }
 
-void cluster::guild_command_create(const slashcommand &s, snowflake guild_id, command_completion_event_t callback) {
+void cluster::guild_command_create(const slashcommand &s, snowflake_t<guild> guild_id, command_completion_event_t callback) {
 	this->post_rest(API_PATH "/applications", std::to_string(s.application_id ? s.application_id : me.id), "guilds/" + std::to_string(guild_id) + "/commands", m_post, s.build_json(false), [s, this, guild_id, callback] (json &j, const http_request_completion_t& http) mutable {
 		if (callback) {
 			callback(confirmation_callback_t(this, slashcommand().fill_from_json(&j), http));
@@ -95,11 +95,11 @@ void cluster::guild_command_create(const slashcommand &s, snowflake guild_id, co
 	});
 }
 
-void cluster::guild_command_delete(snowflake id, snowflake guild_id, command_completion_event_t callback) {
+void cluster::guild_command_delete(snowflake_t<slashcommand> id, snowflake_t<guild> guild_id, command_completion_event_t callback) {
 	rest_request<confirmation>(this, API_PATH "/applications", std::to_string(me.id), "guilds/" + std::to_string(guild_id) + "/commands/" + std::to_string(id), m_delete, "", callback);
 }
 
-void cluster::guild_command_edit_permissions(const slashcommand &s, snowflake guild_id, command_completion_event_t callback) {
+void cluster::guild_command_edit_permissions(const slashcommand &s, snowflake_t<guild> guild_id, command_completion_event_t callback) {
 	json j;
 	if (!s.permissions.empty()) {
 		j["permissions"] = json();
@@ -111,19 +111,19 @@ void cluster::guild_command_edit_permissions(const slashcommand &s, snowflake gu
 	rest_request<confirmation>(this, API_PATH "/applications", std::to_string(s.application_id ? s.application_id : me.id), "guilds/" + std::to_string(guild_id) + "/commands/" + std::to_string(s.id) + "/permissions", m_put, j.dump(), callback);
 }
 
-void cluster::guild_command_get(snowflake id, snowflake guild_id, command_completion_event_t callback) {
+void cluster::guild_command_get(snowflake_t<slashcommand> id, snowflake_t<guild> guild_id, command_completion_event_t callback) {
 	rest_request<slashcommand>(this, API_PATH "/applications", std::to_string(me.id), "guilds/" + std::to_string(guild_id) + "/commands/" + std::to_string(id), m_get, "", callback);
 }
 
-void cluster::guild_command_get_permissions(snowflake id, snowflake guild_id, command_completion_event_t callback) {
+void cluster::guild_command_get_permissions(snowflake_t<slashcommand> id, snowflake_t<guild> guild_id, command_completion_event_t callback) {
 	rest_request<guild_command_permissions>(this, API_PATH "/applications", std::to_string(me.id), "guilds/" + std::to_string(guild_id) + "/commands/" + std::to_string(id) + "/permissions", m_get, "", callback);
 }
 
-void cluster::guild_command_edit(const slashcommand &s, snowflake guild_id, command_completion_event_t callback) {
+void cluster::guild_command_edit(const slashcommand &s, snowflake_t<guild> guild_id, command_completion_event_t callback) {
 	rest_request<confirmation>(this, API_PATH "/applications", std::to_string(s.application_id ? s.application_id : me.id), "guilds/" + std::to_string(guild_id) + "/commands/" + std::to_string(s.id), m_patch, s.build_json(true), callback);
 }
 
-void cluster::guild_commands_get(snowflake guild_id, command_completion_event_t callback) {
+void cluster::guild_commands_get(snowflake_t<guild> guild_id, command_completion_event_t callback) {
 	rest_request_list<slashcommand>(this, API_PATH "/applications", std::to_string(me.id), "/guilds/" + std::to_string(guild_id) + "/commands", m_get, "", callback);
 }
 

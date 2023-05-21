@@ -29,6 +29,9 @@
  */
 namespace dpp {
 
+class role;
+class guild;
+
 /** @brief A container for a 64 bit unsigned value representing many things on discord.
  * This value is known in distributed computing as a snowflake_t value.
  * 
@@ -62,18 +65,18 @@ public:
 	 * @brief Construct a snowflake_t object
 	 * @param value A snowflake_t value
 	 */
-	snowflake_t(const uint64_t& value);
+	snowflake_t(const uint64_t& value) noexcept;
 
 	/**
 	 * @brief Construct a snowflake_t object
 	 * @param string_value A snowflake_t value
 	 */
-	snowflake_t(const std::string& string_value);
+	snowflake_t(const std::string& string_value) noexcept;
 
 	/**
  	 * @brief Construct a snowflake_t object
  	 */
-	snowflake_t();
+	snowflake_t() noexcept;
 
 	/**
 	 * @brief Destroy the snowflake_t object
@@ -84,14 +87,14 @@ public:
 	 * @brief For acting like an integer
 	 * @return The snowflake_t value
 	 */
-	operator uint64_t() const;
+	operator uint64_t() const noexcept;
 
 	/**
 	 * @brief Returns true if the snowflake_t holds an empty value (is 0)
 	 * 
 	 * @return true if empty (zero)
 	 */
-	inline bool empty() const
+	inline bool empty() const noexcept
 	{
 		return value == 0;
 	}
@@ -104,7 +107,7 @@ public:
 	 * @param rhs second snowflake_t to compare
 	 * @return true if lhs is less than rhs
 	 */
-	friend inline bool operator< (const snowflake_t& lhs, const snowflake_t& rhs)
+	friend inline bool operator< (const snowflake_t& lhs, const snowflake_t& rhs) noexcept
 	{
 		return lhs.value < rhs.value;
 	}
@@ -114,14 +117,14 @@ public:
 	 * 
 	 * @param snowflake_t_val string to assign from.
 	 */
-	snowflake_t& operator=(const std::string &snowflake_t_val);
+	snowflake_t& operator=(const std::string &snowflake_t_val) noexcept;
 
 	/**
 	 * @brief Assign from std::string
 	 * 
 	 * @param snowflake_t_val value to assign from.
 	 */
-	snowflake_t& operator=(const uint64_t &snowflake_t_val);
+	snowflake_t& operator=(const uint64_t &snowflake_t_val) noexcept;
 
 	/**
 	 * @brief Check if one snowflake_t value is equal to another
@@ -129,7 +132,7 @@ public:
 	 * @param other other snowflake_t to compare
 	 * @return True if the snowflake_t objects match
 	 */
-	bool operator==(const snowflake_t& other) const;
+	bool operator==(const snowflake_t& other) const noexcept;
 
 	/**
 	 * @brief Check if one snowflake_t value is equal to a uint64_t
@@ -137,7 +140,7 @@ public:
 	 * @param other other snowflake_t to compare
 	 * @return True if the snowflake_t objects match
 	 */
-	bool operator==(const uint64_t& other) const;
+	bool operator==(const uint64_t& other) const noexcept;
 
 	/**
 	 * @brief For building json
@@ -151,21 +154,21 @@ public:
 	 * @return double creation time inferred from the snowflake_t ID.
 	 * The minimum possible value is the first second of 2015.
 	 */
-	double get_creation_time() const;
+	double get_creation_time() const noexcept;
 
 	/**
 	 * @brief Get the worker id that produced this snowflake_t value
 	 * 
 	 * @return uint8_t worker id
 	 */
-	uint8_t get_worker_id() const;
+	uint8_t get_worker_id() const noexcept;
 
 	/**
 	 * @brief Get the process id that produced this snowflake_t value
 	 * 
 	 * @return uint8_t process id
 	 */
-	uint8_t get_process_id() const;
+	uint8_t get_process_id() const noexcept;
 
 	/**
 	 * @brief Get the increment, which is incremented for every snowflake_t
@@ -173,11 +176,13 @@ public:
 	 * 
 	 * @return uint64_t millisecond increment
 	 */
-	uint16_t get_increment() const;
+	uint16_t get_increment() const noexcept;
 };
 
 template <typename T>
 class snowflake_t final : public snowflake_t<void> {
+	using base = snowflake_t<void>;
+
 	friend struct std::hash<dpp::snowflake_t<T>>;
 public:
 	/**
@@ -185,7 +190,7 @@ public:
 	 * @param value A snowflake_t value
 	 */
 	template <typename U, typename = std::enable_if_t<std::is_integral_v<U>>>
-	snowflake_t(U value) : snowflake_t<void>(value) {
+	snowflake_t(U value) noexcept : snowflake_t<void>(value) {
 
 	}
 
@@ -193,14 +198,14 @@ public:
 	 * @brief Construct a snowflake_t object
 	 * @param string_value A snowflake_t value
 	 */
-	snowflake_t(const std::string& string_value) : snowflake_t<void>(string_value) {
+	snowflake_t(const std::string& string_value) noexcept : snowflake_t<void>(string_value) {
 	}
 	
 	/**
 	 * @brief Construct a snowflake_t object
 	 * @param value A snowflake_t
 	 */
-	snowflake_t(const snowflake_t &value) : snowflake_t<void>(value.value) {
+	snowflake_t(const snowflake_t &value) noexcept : snowflake_t<void>(value.value) {
 	}
 	
 	/**
@@ -208,7 +213,7 @@ public:
 	 * @param value A snowflake_t
 	 */
 	template <typename U, typename = std::enable_if_t<std::is_same_v<U, void> || std::is_same_v<T, role> && std::is_same_v<U, guild>>>
-	snowflake_t(const snowflake_t<U> &value) : snowflake_t<void>(static_cast<uint64_t>(value)) {
+	snowflake_t(const snowflake_t<U> &value) noexcept : snowflake_t<void>(static_cast<uint64_t>(value)) {
 	}
 
 	/**
@@ -221,9 +226,11 @@ public:
 	 */
 	~snowflake_t() = default;
 
-	using snowflake_t<void>::operator nlohmann::json;
+	using base::operator nlohmann::json;
 
-	using snowflake_t<void>::operator size_t;
+	operator uint64_t() const noexcept {
+		return value;
+	}
 };
 
 snowflake_t(uint64_t) -> snowflake_t<void>;

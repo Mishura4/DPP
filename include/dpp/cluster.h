@@ -1363,7 +1363,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::slashcommand object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void global_command_get(snowflake id, command_completion_event_t callback = utility::log_error());
+	void global_command_get(snowflake_t<slashcommand> id, command_completion_event_t callback = utility::log_error());
 
 	/**
 	 * @brief Get the audit log for a guild
@@ -1378,7 +1378,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::auditlog object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void guild_auditlog_get(snowflake guild_id, snowflake user_id, uint32_t action_type, snowflake before, snowflake after, uint32_t limit, command_completion_event_t callback);
+	void guild_auditlog_get(snowflake_t<guild> guild_id, snowflake_t<user> user_id, uint32_t action_type, snowflake_t<user> before, snowflake_t<user> after, uint32_t limit, command_completion_event_t callback);
 
 	/**
 	 * @brief Create a slash command local to a guild
@@ -1390,7 +1390,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::slashcommand object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void guild_command_create(const slashcommand &s, snowflake guild_id, command_completion_event_t callback = utility::log_error());
+	void guild_command_create(const slashcommand &s, snowflake_t<guild> guild_id, command_completion_event_t callback = utility::log_error());
 
 
 	/**
@@ -1404,7 +1404,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::slashcommand_map object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void guild_bulk_command_create(const std::vector<slashcommand> &commands, snowflake guild_id, command_completion_event_t callback = utility::log_error());
+	void guild_bulk_command_create(const std::vector<slashcommand> &commands, snowflake_t<guild> guild_id, command_completion_event_t callback = utility::log_error());
 
 	/**
 	 * @brief Create/overwrite global slash commands.
@@ -1439,7 +1439,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::slashcommand object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void guild_command_get(snowflake id, snowflake guild_id, command_completion_event_t callback = utility::log_error());
+	void guild_command_get(snowflake_t<slashcommand> id, snowflake_t<guild> guild_id, command_completion_event_t callback = utility::log_error());
 
 	/**
 	 * @brief Edit a slash command local to a guild
@@ -1450,7 +1450,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::confirmation object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void guild_command_edit(const slashcommand &s, snowflake guild_id, command_completion_event_t callback = utility::log_error());
+	void guild_command_edit(const slashcommand &s, snowflake_t<guild> guild_id, command_completion_event_t callback = utility::log_error());
 
 	/**
 	 * @brief Edit slash command permissions of a guild
@@ -1462,7 +1462,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::confirmation object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void guild_command_edit_permissions(const slashcommand &s, snowflake guild_id, command_completion_event_t callback = utility::log_error());
+	void guild_command_edit_permissions(const slashcommand &s, snowflake_t<guild> guild_id, command_completion_event_t callback = utility::log_error());
 
 	/**
 	 * @brief Get the permissions for a slash command of a guild
@@ -1473,7 +1473,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::guild_command_permissions object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void guild_command_get_permissions(snowflake id, snowflake guild_id, command_completion_event_t callback = utility::log_error());
+	void guild_command_get_permissions(snowflake_t<slashcommand> id, snowflake_t<guild> guild_id, command_completion_event_t callback = utility::log_error());
 
 	/**
 	 * @brief Edit/Overwrite the permissions of all existing slash commands in a guild
@@ -1488,7 +1488,7 @@ public:
 	 * On success the callback will contain a dpp::guild_command_permissions_map object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 * @deprecated This has been disabled with updates to Permissions v2. You can use guild_command_edit_permissions instead
 	 */
-	void guild_bulk_command_edit_permissions(const std::vector<slashcommand> &commands, snowflake guild_id, command_completion_event_t callback = utility::log_error());
+	void guild_bulk_command_edit_permissions(const std::vector<slashcommand> &commands, snowflake_t<guild> guild_id, command_completion_event_t callback = utility::log_error());
 
 	/**
 	 * @brief Delete a global slash command (a bot can have a maximum of 100 of these)
@@ -1498,7 +1498,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::confirmation object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void global_command_delete(snowflake id, command_completion_event_t callback = utility::log_error());
+	void global_command_delete(snowflake_t<slashcommand> id, command_completion_event_t callback = utility::log_error());
 
 	/**
 	 * @brief Delete a slash command local to a guild
@@ -1509,7 +1509,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::confirmation object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void guild_command_delete(snowflake id, snowflake guild_id, command_completion_event_t callback = utility::log_error());
+	void guild_command_delete(snowflake_t<slashcommand> id, snowflake_t<guild> guild_id, command_completion_event_t callback = utility::log_error());
 
 	/**
 	 * @brief Get the application's slash commands for a guild
@@ -1520,7 +1520,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::slashcommand_map object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void guild_commands_get(snowflake guild_id, command_completion_event_t callback);
+	void guild_commands_get(snowflake_t<guild> guild_id, command_completion_event_t callback);
 
 	/**
 	 * @brief Get all slash command permissions of a guild
@@ -1530,7 +1530,7 @@ public:
 	 * @param callback Function to call when the API call completes.
 	 * On success the callback will contain a dpp::guild_command_permissions_map object in confirmation_callback_t::value. On failure, the value is undefined and confirmation_callback_t::is_error() method will return true. You can obtain full error details with confirmation_callback_t::get_error().
 	 */
-	void guild_commands_get_permissions(snowflake guild_id, command_completion_event_t callback);
+	void guild_commands_get_permissions(snowflake_t<guild> guild_id, command_completion_event_t callback);
 
 	/**
 	 * @brief Get the application's global slash commands
