@@ -45,7 +45,7 @@ namespace dpp {
  * @see https://en.wikipedia.org/wiki/Snowflake_ID
  * @see https://github.com/twitter-archive/snowflake/tree/b3f6a3c6ca8e1b6847baa6ff42bf72201e2c2231
  */
-class DPP_EXPORT snowflake final {
+class DPP_EXPORT snowflake {
 	friend struct std::hash<dpp::snowflake>;
 protected:
 	/**
@@ -178,6 +178,57 @@ public:
 	uint16_t get_increment() const;
 };
 
+template <typename T>
+class strict_snowflake final : public snowflake {
+	friend struct std::hash<dpp::strict_snowflake<T>>;
+public:
+	/**
+	 * @brief Construct a snowflake object
+	 * @param value A snowflake value
+	 */
+	explicit strict_snowflake(const uint64_t& value) : snowflake(value) {
+
+	}
+
+	/**
+	 * @brief Construct a snowflake object
+	 * @param string_value A snowflake value
+	 */
+	explicit strict_snowflake(const std::string& string_value) : snowflake(string_value) {
+	}
+	
+
+	/**
+ 	 * @brief Construct a snowflake object
+ 	 */
+	strict_snowflake() = default;
+
+	/**
+	 * @brief Destroy the snowflake object
+	 */
+	~strict_snowflake() = default;
+
+	using snowflake::operator nlohmann::json();
+
+	using snowflake::operator size_t();
+
+	using snowflake::operator uint64_t &();
+
+	using snowflake::operator=();
+
+	using snowflake::operator==();
+};
+
+using guild_snowflake = strict_snowflake<guild>;
+
+using channel_snowflake = strict_snowflake<channel>;
+
+using user_snowflake = strict_snowflake<user>;
+
+using message_snowflake = strict_snowflake<message>;
+
+using emoji_snowflake = strict_snowflake<emoji>;
+
 };
 
 template<>
@@ -191,6 +242,20 @@ struct std::hash<dpp::snowflake>
 	 * @return std::size_t hash value
 	 */
 	std::size_t operator()(dpp::snowflake const& s) const noexcept {
+		return std::hash<uint64_t>{}(s.value);
+	}
+};
+
+template <typename T>
+struct std::hash<dpp::strict_snowflake<T>> {
+	/**
+	 * @brief Hashing function for dpp::slowflake
+	 * Used by std::unordered_map. This just calls std::hash<uint64_t>.
+	 * 
+	 * @param s Snowflake value to hash
+	 * @return std::size_t hash value
+	 */
+	std::size_t operator()(dpp::strict_snowflake<T> const& s) const noexcept {
 		return std::hash<uint64_t>{}(s.value);
 	}
 };
