@@ -510,7 +510,7 @@ typedef std::unordered_map<snowflake, guild_member> members_container;
 /**
  * @brief Represents a guild on Discord (AKA a server)
  */
-class DPP_EXPORT guild : public managed, public json_interface<guild>  {
+class DPP_EXPORT guild : public managed<guild>, public json_interface<guild>  {
 public:
 	/** Guild name */
 	std::string name;

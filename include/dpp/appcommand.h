@@ -661,7 +661,7 @@ void from_json(const nlohmann::json& j, autocomplete_interaction& ai);
  * into the events on_form_submit, on_slashcommand, on_user_context_menu,
  * on_button_click, on_select_menu, etc.
  */
-class DPP_EXPORT interaction : public managed, public json_interface<interaction>  {
+class DPP_EXPORT interaction : public managed<interaction>, public json_interface<interaction>  {
 
 	/**
 	 * @brief Get a resolved object from the resolved set
@@ -982,7 +982,7 @@ void to_json(nlohmann::json& j, const guild_command_permissions& gcp);
  * @brief Represents an application command, created by your bot
  * either globally, or on a guild.
  */
-class DPP_EXPORT slashcommand : public managed, public json_interface<slashcommand>  {
+class DPP_EXPORT slashcommand : public managed<slashcommand>, public json_interface<slashcommand>  {
 public:
 	/**
 	 * @brief Application id (usually matches your bots id)

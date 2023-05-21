@@ -27,12 +27,12 @@
 
 namespace dpp {
 
-std::unordered_map<managed*, time_t> deletion_queue;
+std::unordered_map<detail::managed_base*, time_t> deletion_queue;
 std::mutex deletion_mutex;
 
 #define cache_helper(type, cache_name, setter, getter, counter) \
 cache<type>* cache_name = nullptr; \
-type * setter (snowflake id) { \
+type * setter (snowflake_t<type> id) { \
 		return cache_name ? ( type * ) cache_name ->find(id) : nullptr; \
 } \
 cache<type>* getter () { \

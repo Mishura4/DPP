@@ -49,7 +49,7 @@ enum emoji_flags : uint8_t {
 /**
  * @brief Represents an emoji for a dpp::guild
  */
-class DPP_EXPORT emoji : public managed, public json_interface<emoji>  {
+class DPP_EXPORT emoji : public managed<emoji>, public json_interface<emoji>  {
 public:
 	/**
 	 * @brief Emoji name
@@ -80,7 +80,7 @@ public:
 	 * @param i ID, if it has one (unicode does not)
 	 * @param f Emoji flags (emoji_flags)
 	 */
-	emoji(const std::string n, const snowflake i = 0, const uint8_t f = 0);
+	emoji(const std::string n, const snowflake_t<emoji> i = 0, const uint8_t f = 0);
 
 	/**
 	 * @brief Destroy the emoji object

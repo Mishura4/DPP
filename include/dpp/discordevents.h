@@ -39,6 +39,13 @@ uint64_t DPP_EXPORT snowflake_not_null(const nlohmann::json* j, const char *keyn
  */
 void DPP_EXPORT set_snowflake_not_null(const nlohmann::json* j, const char *keyname, uint64_t &v);
 
+/** @brief Sets a snowflake id from a json field value, if defined, else does nothing
+ * @param j nlohmann::json instance to retrieve value from
+ * @param keyname key name to check for a value
+ * @param v Value to change
+ */
+void DPP_EXPORT set_snowflake_not_null(const nlohmann::json* j, const char *keyname, dpp::snowflake &v);
+
 /** @brief Returns a string from a json field value, if defined, else returns an empty string.
  * @param j nlohmann::json instance to retrieve value from
  * @param keyname key name to check for a value

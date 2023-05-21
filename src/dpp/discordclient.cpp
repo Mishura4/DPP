@@ -557,12 +557,11 @@ void discord_client::one_second_timer()
 
 uint64_t discord_client::get_guild_count() {
 	uint64_t total = 0;
-	dpp::cache<guild>* c = dpp::get_guild_cache();
+	dpp::cache<guild>* cache = dpp::get_guild_cache();
 	/* IMPORTANT: We must lock the container to iterate it */
-	std::shared_lock l(c->get_mutex());
-	std::unordered_map<snowflake, guild*>& gc = c->get_container();
-	for (auto g = gc.begin(); g != gc.end(); ++g) {
-		dpp::guild* gp = (dpp::guild*)g->second;
+	std::shared_lock l(cache->get_mutex());
+	for (auto &guild_entry : cache->get_container()) {
+		dpp::guild* gp = (dpp::guild*)guild_entry.second;
 		if (gp->shard_id == this->shard_id) {
 			total++;
 		}
@@ -572,12 +571,11 @@ uint64_t discord_client::get_guild_count() {
 
 uint64_t discord_client::get_member_count() {
 	uint64_t total = 0;
-	dpp::cache<guild>* c = dpp::get_guild_cache();
+	dpp::cache<guild>* cache = dpp::get_guild_cache();
 	/* IMPORTANT: We must lock the container to iterate it */
-	std::shared_lock l(c->get_mutex());
-	std::unordered_map<snowflake, guild*>& gc = c->get_container();
-	for (auto g = gc.begin(); g != gc.end(); ++g) {
-		dpp::guild* gp = (dpp::guild*)g->second;
+	std::shared_lock l(cache->get_mutex());
+	for (auto &guild_entry : cache->get_container()) {
+		dpp::guild* gp = (dpp::guild*)guild_entry.second;
 		if (gp->shard_id == this->shard_id) {
 			if (creator->cache_policy.user_policy == dpp::cp_aggressive) {
 				/* We can use actual member count if we are using full user caching */
@@ -593,12 +591,11 @@ uint64_t discord_client::get_member_count() {
 
 uint64_t discord_client::get_channel_count() {
 	uint64_t total = 0;
-	dpp::cache<guild>* c = dpp::get_guild_cache();
+	dpp::cache<guild>* cache = dpp::get_guild_cache();
 	/* IMPORTANT: We must lock the container to iterate it */
-	std::shared_lock l(c->get_mutex());
-	std::unordered_map<snowflake, guild*>& gc = c->get_container();
-	for (auto g = gc.begin(); g != gc.end(); ++g) {
-		dpp::guild* gp = (dpp::guild*)g->second;
+	std::shared_lock l(cache->get_mutex());
+	for (auto &guild_entry : cache->get_container()) {
+		dpp::guild* gp = (dpp::guild*)guild_entry.second;
 		if (gp->shard_id == this->shard_id) {
 			total += gp->channels.size();
 		}

@@ -150,7 +150,7 @@ public:
  * @brief Represents a reaction.
  * Can be filled for use in a collector
  */
-class collected_reaction : public managed {
+class collected_reaction : public managed<message> {
 public:
 	/// Reacting user
 	user react_user;

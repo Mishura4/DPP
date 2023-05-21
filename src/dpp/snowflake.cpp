@@ -23,9 +23,9 @@
 
 namespace dpp {
 
-snowflake::snowflake(const uint64_t &value) : value(value) {}
+snowflake_t<void>::snowflake_t(const uint64_t &value) : value(value) {}
 
-snowflake::snowflake(const std::string &string_value) {
+snowflake_t<void>::snowflake_t(const std::string &string_value) {
 	try {
 		value = std::stoull(string_value);
 	}
@@ -34,13 +34,9 @@ snowflake::snowflake(const std::string &string_value) {
 	}
 }
 
-snowflake::snowflake() : snowflake(0) {}
+snowflake_t<void>::snowflake_t() : snowflake(0) {}
 
 snowflake::operator uint64_t() const {
-	return value;
-}
-
-snowflake::operator uint64_t &() {
 	return value;
 }
 

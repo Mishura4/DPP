@@ -101,7 +101,7 @@ public:
 /**
  * @brief The application class represents details of a bot application
  */
-class DPP_EXPORT application : public managed, public json_interface<application>  {
+class DPP_EXPORT application : public managed<application>, public json_interface<application>  {
 public:
 	std::string		name;			//!< the name of the app
 	utility::iconhash	icon;			//!< the icon hash of the app (may be empty)

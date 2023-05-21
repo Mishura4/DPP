@@ -85,7 +85,7 @@ enum user_flags : uint32_t {
 /**
  * @brief Represents a user on discord. May or may not be a member of a dpp::guild.
  */
-class DPP_EXPORT user : public managed, public json_interface<user>  {
+class DPP_EXPORT user : public managed<user>, public json_interface<user>  {
 public:
 	/** Discord username */
 	std::string username;

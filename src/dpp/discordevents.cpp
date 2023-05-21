@@ -80,6 +80,12 @@ void set_snowflake_not_null(const json* j, const char *keyname, uint64_t &v) {
 		v = !k->is_null() && k->is_string() ? strtoull(k->get<std::string>().c_str(), nullptr, 10) : 0;
 	}
 }
+void set_snowflake_not_null(const json* j, const char *keyname, dpp::snowflake &v) {
+	auto k = j->find(keyname);
+	if (k != j->end()) {
+		v = !k->is_null() && k->is_string() ? strtoull(k->get<std::string>().c_str(), nullptr, 10) : 0;
+	}
+}
 
 
 std::string string_not_null(const json* j, const char *keyname) {

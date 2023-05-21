@@ -22,19 +22,4 @@
 
 namespace dpp {
 
-managed::managed(const snowflake nid) : id(nid) {
-}
-
-bool managed::operator==(const managed& other) const noexcept {
-	return id == other.id;
-}
-
-bool managed::operator!=(const managed& other) const noexcept {
-	return id != other.id;
-}
-
-double managed::get_creation_time() const {
-	return this->id.get_creation_time();
-}
-
 };

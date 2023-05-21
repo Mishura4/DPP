@@ -24,27 +24,46 @@
 #include <string>
 
 namespace dpp {
+	namespace detail {
+		/**
+		 * @brief Internal class that is the base of a managed object
+		 * For caching and polymorphism purposes, do not use
+		 */
+		class DPP_EXPORT managed_base {
+		public:
+			/**
+			 * @brief Destroy the managed object
+			 */
+			virtual ~managed_base() = default;
+		};
+	}
 
 	/** @brief The managed class is the base class for various types that can
 	 * be stored in a cache that are identified by a dpp::snowflake id.
 	 */
-	class DPP_EXPORT managed {
+	template <typename T>
+	class managed : public detail::managed_base {
 	public:
+		using object_type = T;
+
 		/**
 		 * @brief Unique ID of object set by Discord.
 		 * This value contains a timestamp, worker ID, internal server ID, and an incrementing value.
 		 * Only the timestamp is relevant to us as useful metadata.
 		 */
-		snowflake id;
+		snowflake_t<T> id;
+
 		/**
 		 * @brief Constructor, initialises ID
 		 * @param nid ID to set
 		 */
-		managed(const snowflake nid = 0);
+		explicit managed(const snowflake_t<T> nid = snowflake_t<T>{0}) : id{nid} {
+		}
+
 		/**
 		 * @brief Destroy the managed object
 		 */
-		virtual ~managed() = default;
+		virtual ~managed() override = default;
 
 		/**
 		 * @brief Get the creation time of this object according to Discord.
@@ -52,7 +71,9 @@ namespace dpp {
 		 * @return double creation time inferred from the snowflake ID.
 		 * The minimum possible value is the first second of 2015.
 		 */
-		double get_creation_time() const;
+		double get_creation_time() const {
+			return this->id.get_creation_time();
+		}
 
 		/**
 		 * @brief Comparison operator for comparing two managed objects by id
@@ -61,7 +82,9 @@ namespace dpp {
 		 * @return true objects are the same id
 		 * @return false objects are not the same id
 		 */
-		bool operator==(const managed& other) const noexcept;
+		bool operator==(const managed& other) const noexcept {
+			return id == other.id;
+		}
 
 		/**
 		 * @brief Comparison operator for comparing two managed objects by id
@@ -70,7 +93,9 @@ namespace dpp {
 		 * @return true objects are not the same id
 		 * @return false objects are the same id
 		 */
-		bool operator!=(const managed& other) const noexcept;
+		bool operator!=(const managed& other) const noexcept {
+			return !(id == other.id);
+		}
 	};
 
 };

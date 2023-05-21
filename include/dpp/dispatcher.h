@@ -931,7 +931,7 @@ struct DPP_EXPORT message_reaction_add_t : public event_dispatch_t {
 	/**
 	 * @brief message id of the message reacted upon
 	 */
-	snowflake message_id;
+	snowflake_t<message> message_id;
 };
 
 /** @brief Guild members chunk */

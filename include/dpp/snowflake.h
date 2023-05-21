@@ -30,60 +30,64 @@
 namespace dpp {
 
 /** @brief A container for a 64 bit unsigned value representing many things on discord.
- * This value is known in distributed computing as a snowflake value.
+ * This value is known in distributed computing as a snowflake_t value.
  * 
- * Snowflakes are:
+ * snowflake_ts are:
  * 
  * - Performant (very fast to generate at source and to compare in code)
  * - Uncoordinated (allowing high availability across clusters, data centres etc)
- * - Time ordered (newer snowflakes have higher IDs)
+ * - Time ordered (newer snowflake_ts have higher IDs)
  * - Directly Sortable (due to time ordering)
  * - Compact (64 bit numbers, not 128 bit, or string)
  * 
- * An identical format of snowflake is used by Twitter, Instagram and several other platforms.
+ * An identical format of snowflake_t is used by Twitter, Instagram and several other platforms.
  * 
- * @see https://en.wikipedia.org/wiki/Snowflake_ID
- * @see https://github.com/twitter-archive/snowflake/tree/b3f6a3c6ca8e1b6847baa6ff42bf72201e2c2231
+ * @see https://en.wikipedia.org/wiki/snowflake_t_ID
+ * @see https://github.com/twitter-archive/snowflake_t/tree/b3f6a3c6ca8e1b6847baa6ff42bf72201e2c2231
  */
-class DPP_EXPORT snowflake {
-	friend struct std::hash<dpp::snowflake>;
+template <typename T = void>
+class snowflake_t;
+
+template <>
+class DPP_EXPORT snowflake_t<void> {
+	friend struct std::hash<dpp::snowflake_t<void>>;
 protected:
 	/**
-	 * @brief The snowflake value
+	 * @brief The snowflake_t value
 	 */
 	uint64_t value;
 
 public:
 	/**
-	 * @brief Construct a snowflake object
-	 * @param value A snowflake value
+	 * @brief Construct a snowflake_t object
+	 * @param value A snowflake_t value
 	 */
-	snowflake(const uint64_t& value);
+	snowflake_t(const uint64_t& value);
 
 	/**
-	 * @brief Construct a snowflake object
-	 * @param string_value A snowflake value
+	 * @brief Construct a snowflake_t object
+	 * @param string_value A snowflake_t value
 	 */
-	snowflake(const std::string& string_value);
+	snowflake_t(const std::string& string_value);
 
 	/**
- 	 * @brief Construct a snowflake object
+ 	 * @brief Construct a snowflake_t object
  	 */
-	snowflake();
+	snowflake_t();
 
 	/**
-	 * @brief Destroy the snowflake object
+	 * @brief Destroy the snowflake_t object
 	 */
-	~snowflake() = default;
+	~snowflake_t() = default;
 
 	/**
 	 * @brief For acting like an integer
-	 * @return The snowflake value
+	 * @return The snowflake_t value
 	 */
 	operator uint64_t() const;
 
 	/**
-	 * @brief Returns true if the snowflake holds an empty value (is 0)
+	 * @brief Returns true if the snowflake_t holds an empty value (is 0)
 	 * 
 	 * @return true if empty (zero)
 	 */
@@ -94,13 +98,13 @@ public:
 
 	/**
 	 * @brief Operator less than, used for maps/unordered maps
-	 * when the snowflake is a key value.
+	 * when the snowflake_t is a key value.
 	 * 
-	 * @param lhs fist snowflake to compare
-	 * @param rhs second snowflake to compare
+	 * @param lhs fist snowflake_t to compare
+	 * @param rhs second snowflake_t to compare
 	 * @return true if lhs is less than rhs
 	 */
-	friend inline bool operator< (const snowflake& lhs, const snowflake& rhs)
+	friend inline bool operator< (const snowflake_t& lhs, const snowflake_t& rhs)
 	{
 		return lhs.value < rhs.value;
 	}
@@ -108,69 +112,63 @@ public:
 	/**
 	 * @brief Assign from std::string
 	 * 
-	 * @param snowflake_val string to assign from.
+	 * @param snowflake_t_val string to assign from.
 	 */
-	snowflake& operator=(const std::string &snowflake_val);
+	snowflake_t& operator=(const std::string &snowflake_t_val);
 
 	/**
 	 * @brief Assign from std::string
 	 * 
-	 * @param snowflake_val value to assign from.
+	 * @param snowflake_t_val value to assign from.
 	 */
-	snowflake& operator=(const uint64_t &snowflake_val);
+	snowflake_t& operator=(const uint64_t &snowflake_t_val);
 
 	/**
-	 * @brief Check if one snowflake value is equal to another
+	 * @brief Check if one snowflake_t value is equal to another
 	 * 
-	 * @param other other snowflake to compare
-	 * @return True if the snowflake objects match
+	 * @param other other snowflake_t to compare
+	 * @return True if the snowflake_t objects match
 	 */
-	bool operator==(const snowflake& other) const;
+	bool operator==(const snowflake_t& other) const;
 
 	/**
-	 * @brief Check if one snowflake value is equal to a uint64_t
+	 * @brief Check if one snowflake_t value is equal to a uint64_t
 	 * 
-	 * @param other other snowflake to compare
-	 * @return True if the snowflake objects match
+	 * @param other other snowflake_t to compare
+	 * @return True if the snowflake_t objects match
 	 */
 	bool operator==(const uint64_t& other) const;
 
 	/**
-	 * @brief For acting like an integer
-	 * @return A reference to the snowflake value
-	 */
-	operator uint64_t &();
-
-	/**
 	 * @brief For building json
-	 * @return The snowflake value as a string
+	 * @return The snowflake_t value as a string
 	 */
 	operator nlohmann::json() const;
 
 	/**
-	 * @brief Get the creation time of this snowflake according to Discord.
+	 * @brief Get the creation time of this snowflake_t according to Discord.
 	 * 
-	 * @return double creation time inferred from the snowflake ID.
+	 * @return double creation time inferred from the snowflake_t ID.
 	 * The minimum possible value is the first second of 2015.
 	 */
 	double get_creation_time() const;
 
 	/**
-	 * @brief Get the worker id that produced this snowflake value
+	 * @brief Get the worker id that produced this snowflake_t value
 	 * 
 	 * @return uint8_t worker id
 	 */
 	uint8_t get_worker_id() const;
 
 	/**
-	 * @brief Get the process id that produced this snowflake value
+	 * @brief Get the process id that produced this snowflake_t value
 	 * 
 	 * @return uint8_t process id
 	 */
 	uint8_t get_process_id() const;
 
 	/**
-	 * @brief Get the increment, which is incremented for every snowflake
+	 * @brief Get the increment, which is incremented for every snowflake_t
 	 * created over the one millisecond resolution in the timestamp.
 	 * 
 	 * @return uint64_t millisecond increment
@@ -179,83 +177,86 @@ public:
 };
 
 template <typename T>
-class strict_snowflake final : public snowflake {
-	friend struct std::hash<dpp::strict_snowflake<T>>;
+class snowflake_t final : public snowflake_t<void> {
+	friend struct std::hash<dpp::snowflake_t<T>>;
 public:
 	/**
-	 * @brief Construct a snowflake object
-	 * @param value A snowflake value
+	 * @brief Construct a snowflake_t object
+	 * @param value A snowflake_t value
 	 */
-	explicit strict_snowflake(const uint64_t& value) : snowflake(value) {
+	template <typename U, typename = std::enable_if_t<std::is_integral_v<U>>>
+	snowflake_t(U value) : snowflake_t<void>(value) {
 
 	}
 
 	/**
-	 * @brief Construct a snowflake object
-	 * @param string_value A snowflake value
+	 * @brief Construct a snowflake_t object
+	 * @param string_value A snowflake_t value
 	 */
-	explicit strict_snowflake(const std::string& string_value) : snowflake(string_value) {
+	snowflake_t(const std::string& string_value) : snowflake_t<void>(string_value) {
 	}
 	
-
 	/**
- 	 * @brief Construct a snowflake object
- 	 */
-	strict_snowflake() = default;
-
-	/**
-	 * @brief Destroy the snowflake object
+	 * @brief Construct a snowflake_t object
+	 * @param value A snowflake_t
 	 */
-	~strict_snowflake() = default;
+	snowflake_t(const snowflake_t &value) : snowflake_t<void>(value.value) {
+	}
+	
+	/**
+	 * @brief Any to specific, and guild snowflake to @everyone role snowflake conversion
+	 * @param value A snowflake_t
+	 */
+	template <typename U, typename = std::enable_if_t<std::is_same_v<U, void> || std::is_same_v<T, role> && std::is_same_v<U, guild>>>
+	snowflake_t(const snowflake_t<U> &value) : snowflake_t<void>(static_cast<uint64_t>(value)) {
+	}
 
-	using snowflake::operator nlohmann::json();
+	/**
+ 	 * @brief Construct a snowflake_t object
+ 	 */
+	snowflake_t() = default;
 
-	using snowflake::operator size_t();
+	/**
+	 * @brief Destroy the snowflake_t object
+	 */
+	~snowflake_t() = default;
 
-	using snowflake::operator uint64_t &();
+	using snowflake_t<void>::operator nlohmann::json;
 
-	using snowflake::operator=();
-
-	using snowflake::operator==();
+	using snowflake_t<void>::operator size_t;
 };
 
-using guild_snowflake = strict_snowflake<guild>;
+snowflake_t(uint64_t) -> snowflake_t<void>;
 
-using channel_snowflake = strict_snowflake<channel>;
-
-using user_snowflake = strict_snowflake<user>;
-
-using message_snowflake = strict_snowflake<message>;
-
-using emoji_snowflake = strict_snowflake<emoji>;
+using snowflake = snowflake_t<void>;
 
 };
 
 template<>
-struct std::hash<dpp::snowflake>
+struct std::hash<dpp::snowflake_t<void>>
 {
 	/**
 	 * @brief Hashing function for dpp::slowflake
 	 * Used by std::unordered_map. This just calls std::hash<uint64_t>.
 	 * 
-	 * @param s Snowflake value to hash
+	 * @param s snowflake_t value to hash
 	 * @return std::size_t hash value
 	 */
-	std::size_t operator()(dpp::snowflake const& s) const noexcept {
+	std::size_t operator()(dpp::snowflake_t<void> const& s) const noexcept {
 		return std::hash<uint64_t>{}(s.value);
 	}
 };
 
 template <typename T>
-struct std::hash<dpp::strict_snowflake<T>> {
+struct std::hash<dpp::snowflake_t<T>> {
 	/**
 	 * @brief Hashing function for dpp::slowflake
 	 * Used by std::unordered_map. This just calls std::hash<uint64_t>.
 	 * 
-	 * @param s Snowflake value to hash
+	 * @param s snowflake_t value to hash
 	 * @return std::size_t hash value
 	 */
-	std::size_t operator()(dpp::strict_snowflake<T> const& s) const noexcept {
+	std::size_t operator()(dpp::snowflake_t<T> const& s) const noexcept {
 		return std::hash<uint64_t>{}(s.value);
 	}
 };

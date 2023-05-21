@@ -79,7 +79,7 @@ struct DPP_EXPORT integration_app {
 /**
  * @brief Represents an integration on a guild, e.g. a connection to twitch.
  */
-class DPP_EXPORT integration : public managed, public json_interface<integration> {
+class DPP_EXPORT integration : public managed<integration>, public json_interface<integration> {
 public:
 	/** Integration name */
 	std::string name;

@@ -29,7 +29,7 @@
 
 namespace dpp {
 
-extern DPP_EXPORT std::unordered_map<managed*, time_t> deletion_queue;
+extern DPP_EXPORT std::unordered_map<detail::managed_base*, time_t> deletion_queue;
 extern DPP_EXPORT std::mutex deletion_mutex;
 
 /** forward declaration */
@@ -58,16 +58,16 @@ private:
 	/**
 	 * @brief Container of pointers to cached items
 	 */
-	std::unordered_map<snowflake, T*>* cache_map;
+	std::unordered_map<snowflake_t<T>, T*>* cache_map;
 public:
 
 	/**
 	 * @brief Construct a new cache object.
 	 * 
-	 * Caches must contain classes derived from dpp::managed.
+	 * Caches must contain classes derived from dpp::managed<T>.
 	 */
 	cache() {
-		cache_map = new std::unordered_map<snowflake, T*>;
+		cache_map = new std::unordered_map<snowflake_t<T>, T*>;
 	}
 
 	/**
@@ -150,7 +150,7 @@ public:
 	 * @param id Object snowflake id to find
 	 * @return Found object or nullptr if the object with this id does not exist.
 	 */
-	T* find(snowflake id) {
+	T* find(snowflake_t<T> id) {
 		std::shared_lock l(cache_mutex);
 		auto r = cache_map->find(id);
 		if (r != cache_map->end()) {
@@ -231,7 +231,7 @@ public:
 	 */
 	void rehash() {
 		std::unique_lock l(cache_mutex);
-		std::unordered_map<snowflake, T*>* n = new std::unordered_map<snowflake, T*>;
+		std::unordered_map<snowflake_t<T>, T*>* n = new std::unordered_map<snowflake_t<T>, T*>;
 		n->reserve(cache_map->size());
 		for (auto t = cache_map->begin(); t != cache_map->end(); ++t) {
 			n->insert(*t);
@@ -259,7 +259,7 @@ public:
  */
 void DPP_EXPORT garbage_collection();
 
-#define cache_decl(type, setter, getter, counter) /** Find an object in the cache by id. @return type* Pointer to the object or nullptr when it's not found */ DPP_EXPORT class type * setter (snowflake id); DPP_EXPORT cache<class type> * getter (); /** Get the amount of cached type objects. */ DPP_EXPORT uint64_t counter ();
+#define cache_decl(type, setter, getter, counter) /** Find an object in the cache by id. @return type* Pointer to the object or nullptr when it's not found */ DPP_EXPORT class type * setter (snowflake_t<type> id); DPP_EXPORT cache<class type> * getter (); /** Get the amount of cached type objects. */ DPP_EXPORT uint64_t counter ();
 
 /* Declare major caches */
 cache_decl(user, find_user, get_user_cache, get_user_count);

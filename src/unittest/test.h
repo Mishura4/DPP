@@ -54,9 +54,9 @@ struct test_t {
 	bool success = false;
 };
 
-class test_cached_object_t : public dpp::managed {
+class test_cached_object_t : public dpp::managed<test_cached_object_t> {
 public:
-	test_cached_object_t(dpp::snowflake _id) : dpp::managed(_id) { };
+	test_cached_object_t(dpp::snowflake_t<test_cached_object_t> _id) : dpp::managed<test_cached_object_t>(_id) { };
 	virtual ~test_cached_object_t() = default;
 	std::string foo;
 };

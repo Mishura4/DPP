@@ -651,7 +651,7 @@ permission guild::base_permissions(const guild_member &member) const {
 	if (owner_id == member.user_id)
 		return ~0; // return all permissions if it's the owner of the guild
 
-	role* everyone = dpp::find_role(id);
+	role* everyone = dpp::find_role(snowflake_t<role>{id});
 	if (everyone == nullptr)
 		return 0;
 
